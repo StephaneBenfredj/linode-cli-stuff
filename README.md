@@ -1,11 +1,14 @@
 # linode-cli-stuff
 
 Prereqs: jq
+Useful links: https://github.com/linode/linode-cli/wiki/Usage
+
 
 ## install/upgrade with pip
 ```
 pip3 install --upgrade linode-cli
 ```
+
 
 
 ## cli configuration
@@ -16,6 +19,8 @@ The CLI will use its web-based authentication to log you in.
 If you prefer to supply a Personal Access Token,use `linode-cli configure --token`.
 Press enter to continue. This will open a browser and proceed with authentication.
 ```
+
+
 
 ## LKE
 
@@ -36,12 +41,14 @@ linode-cli lke cluster-create --label $LKE_CLUSTER_NAME --tags TEST --region $LI
 ```
 
 
+
 ### Retrieve ClusterID
 ```
 CLUSTER_ID=$(linode lke clusters-list --json | \
     jq -r --arg lke_cluster_name "$LKE_CLUSTER_NAME" \
       '.[] | select(.label == $lke_cluster_name) | .id')
 ```
+
 
 
 ### Retrieve kubeconfig for a given ClusterID
@@ -52,6 +59,7 @@ linode lke kubeconfig-view --json "$CLUSTER_ID" | \
 ```
 
 
+
 ## Volumes
 
 ```
@@ -60,9 +68,11 @@ linode-cli volumes list
 linode-cli volumes delete 7831513
 ```
 
+
+
 ## linode commands
 ```
-% linode-cli commands
+linode-cli commands
 
 
 CLI user management commands:
