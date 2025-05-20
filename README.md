@@ -35,12 +35,14 @@ export K8S_VER="1.31"
 linode-cli lke cluster-create --label $LKE_CLUSTER_NAME --tags TEST --region $LINODE_REGION --k8s_version $K8S_VER --node_pools.type g6-standard-6 --control_plane.high_availability false --control_plane.acl.enabled true --control_plane.acl.addresses.ipv4 "<myIP>/32" --node_pools.count 3
 ```
 
+
 ### Retrieve ClusterID
 ```
 CLUSTER_ID=$(linode lke clusters-list --json | \
     jq -r --arg lke_cluster_name "$LKE_CLUSTER_NAME" \
       '.[] | select(.label == $lke_cluster_name) | .id')
 ```
+
 
 ### Retrieve kubeconfig for a given ClusterID
 ```
@@ -57,3 +59,42 @@ linode-cli volumes list
 
 linode-cli volumes delete 7831513
 ```
+
+## linode commands
+```
+% linode-cli commands
+
+
+CLI user management commands:
+┌─────────────┬──────────┬────────────┐
+│ configure   │ set-user │ show-users │
+│ remove-user │          │            │
+└─────────────┴──────────┴────────────┘
+
+CLI Plugin management commands:
+┌─────────────────┬───────────────┐
+│ register-plugin │ remove-plugin │
+└─────────────────┴───────────────┘
+
+Other CLI commands:
+┌────────────┐
+│ completion │
+└────────────┘
+
+Available commands:
+┌───────────────┬────────────────────┬───────────────────┐
+│ account       │ betas              │ child-account     │
+│ databases     │ domains            │ events            │
+│ firewalls     │ images             │ kernels           │
+│ linodes       │ lke                │ longview          │
+│ managed       │ network-transfer   │ networking        │
+│ nodebalancers │ object-storage     │ payment-methods   │
+│ phone         │ placement          │ profile           │
+│ regions       │ security-questions │ service-transfers │
+│ sshkeys       │ stackscripts       │ tags              │
+│ tickets       │ users              │ vlans             │
+│ volumes       │ vpcs               │                   │
+└───────────────┴────────────────────┴───────────────────┘
+```
+
+
