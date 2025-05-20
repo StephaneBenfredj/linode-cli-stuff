@@ -1,5 +1,21 @@
 # linode-cli-stuff
 
+Prereqs: jq
+
+## install/upgrade with pip
+```
+pip3 install --upgrade linode-cli
+```
+
+
+## cli configuration
+```
+ ~ % linode-cli configure
+Welcome to the Linode CLI.  This will walk you through some initial setup.
+The CLI will use its web-based authentication to log you in.
+If you prefer to supply a Personal Access Token,use `linode-cli configure --token`.
+Press enter to continue. This will open a browser and proceed with authentication.
+```
 
 ## LKE
 
@@ -15,6 +31,29 @@ export K8S_VER="1.31"
 # If a token is being used versus authentication
 # export LINODE_TOKEN=xxx
  
-# Create cluster with 3 nodes/no HA/shared CPU 16G (g6-standard-6) - currently max flavor allowed for SE
-linode-cli lke cluster-create --label $LKE_CLUSTER_NAME --tags TEST_HELM_ESO --region $LINODE_REGION --k8s_version $K8S_VER --node_pools.type g6-standard-6 --control_plane.high_availability false --control_plane.acl.enabled true --control_plane.acl.addresses.ipv4 "<myIP>/32" --node_pools.count 3
+# Create cluster with 3 nodes/no HA/shared CPU 16G (g6-standard-6)
+linode-cli lke cluster-create --label $LKE_CLUSTER_NAME --tags TEST --region $LINODE_REGION --k8s_version $K8S_VER --node_pools.type g6-standard-6 --control_plane.high_availability false --control_plane.acl.enabled true --control_plane.acl.addresses.ipv4 "<myIP>/32" --node_pools.count 3
+```
+
+### Retrieve ClusterID
+```
+CLUSTER_ID=$(linode lke clusters-list --json | \
+    jq -r --arg lke_cluster_name "$LKE_CLUSTER_NAME" \
+      '.[] | select(.label == $lke_cluster_name) | .id')
+```
+
+### Retrieve kubeconfig for a given ClusterID
+```
+linode lke kubeconfig-view --json "$CLUSTER_ID" | \
+    jq -r '.[0].kubeconfig' | \
+    base64 --decode > ~/myrepo/lke-kubeconfig.yaml
+```
+
+
+## Volumes
+
+```
+linode-cli volumes list
+
+linode-cli volumes delete 7831513
 ```
